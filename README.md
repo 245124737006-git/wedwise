@@ -29,6 +29,12 @@ You can also open `index.html` directly in a browser.
 
 This is a static frontend project; no build command is required.
 
+## New visual features
+- Three saved colour palettes: Classic Champagne, Sage Garden and Rose Romance.
+- Subtle page entrance, hover, hero-photo and floating-card animations; respects reduced-motion preferences.
+- Inspiration moodboard with categories, favourites and user-added image URLs.
+- Dashboard JSON backup download for planner data.
+
 ## Data storage and reminders
 - Entries are saved in browser LocalStorage under `wedwiseData`.
 - Data remains in the same browser and device. It is not automatically shared between devices, visitors or browsers.

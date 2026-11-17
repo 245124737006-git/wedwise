@@ -15,8 +15,8 @@
   <a class="brand" href="index.html"><span class="brand-mark">W</span> WedWise</a>
   <button class="menu-toggle" aria-label="Toggle menu">☰</button>
   <nav class="nav-links">
-    <a href="index.html" class="active">Home</a><a href="dashboard.html">Dashboard</a><a href="venues.html">Venues</a><a href="guests.html">Guests</a><a href="budget.html">Budget</a><a href="events.html">Events</a><a href="checklist.html">Checklist</a><a href="vendors.html">Vendors</a><a href="invitations.html">Invitations</a>
-  </nav>
+    <a href="index.html" class="active">Home</a><a href="dashboard.html">Dashboard</a><a href="venues.html">Venues</a><a href="guests.html">Guests</a><a href="budget.html">Budget</a><a href="events.html">Events</a><a href="checklist.html">Checklist</a><a href="vendors.html">Vendors</a><a href="gallery.html">Inspiration</a><a href="invitations.html">Invitations</a>
+  <button class="theme-toggle" type="button" ng-click="vm.cycleTheme()" title="Change colour palette">✧ <span>{{vm.themeLabel()}}</span></button></nav>
 </header>
 <main>
   <section class="hero">
@@ -41,6 +41,10 @@
     <a class="feature-card" href="guests.html"><span class="feature-icon">♧</span><h3>Gather your people</h3><p>Keep guest details and invitations organized.</p><span class="card-arrow">↗</span></a>
     <a class="feature-card" href="budget.html"><span class="feature-icon">₹</span><h3>Stay on budget</h3><p>Track expenses and know where you stand.</p><span class="card-arrow">↗</span></a>
     <a class="feature-card" href="checklist.html"><span class="feature-icon">✓</span><h3>Enjoy the journey</h3><p>Tick off tasks one lovely step at a time.</p><span class="card-arrow">↗</span></a>
+  </section>
+  <section class="gallery-teaser reveal-on-scroll">
+    <div><p class="eyebrow">SAVE THE LITTLE DETAILS</p><h2>Build your wedding <em>moodboard.</em></h2><p>Collect flowers, tablescapes, ceremony ideas and the little details that make the day yours.</p><a class="btn btn-outline" href="gallery.html">Explore inspiration ↗</a></div>
+    <div class="teaser-photos"><img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=700&q=85" alt="Romantic wedding ceremony"><img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=700&q=85" alt="Elegant wedding table"><img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=700&q=85" alt="Wedding venue flowers"></div>
   </section>
   <section class="quote-band"><span>“</span><p>The best weddings aren't just planned. They're felt.</p><small>THE WEDWISE WAY</small></section>
 </main>

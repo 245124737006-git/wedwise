@@ -6,6 +6,14 @@
     var categories = ["Venue", "Catering", "Photography", "Decor", "Outfits & Jewelry", "Invitations", "Miscellaneous"];
     var defaults = {
       weddingDate: "2027-02-14", budget: 1500000,
+      galleryItems: [
+        {id:1,title:"A garden ceremony",category:"Ceremony",image:"https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1000&q=85",favorite:true},
+        {id:2,title:"The floral mandap",category:"Decor",image:"https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1000&q=85",favorite:false},
+        {id:3,title:"An intimate table setting",category:"Reception",image:"https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=1000&q=85",favorite:false},
+        {id:4,title:"A timeless venue",category:"Venues",image:"https://images.unsplash.com/photo-1519225421980-715cb0215edd?auto=format&fit=crop&w=1000&q=85",favorite:true},
+        {id:5,title:"Golden-hour details",category:"Details",image:"https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=1000&q=85",favorite:false},
+        {id:6,title:"A romantic garden setting",category:"Venues",image:"https://images.unsplash.com/photo-1465495976277-4387d4b0e4a6?auto=format&fit=crop&w=1000&q=85",favorite:false}
+      ],
       categoryBudgets: {"Venue":300000,"Catering":450000,"Photography":100000,"Decor":150000,"Outfits & Jewelry":250000,"Invitations":50000,"Miscellaneous":200000},
       guests: [], expenses: [], events: [], tasks: [], vendors: [], venues: [
         {id:1,name:"The Grand Palace",city:"Hyderabad",type:"Luxury",capacity:800,price:250000,image:"https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=900&q=80",description:"An elegant celebration space with grand interiors and landscaped gardens.",saved:false},
@@ -52,7 +60,7 @@
     vm.cityFilter=function(v){return !vm.venueCity || v.city===vm.venueCity;};
     vm.save=function(){
       var payload={};
-      ["weddingDate","budget","categoryBudgets","guests","expenses","events","tasks","vendors","venues"].forEach(function(k){payload[k]=vm[k];});
+      ["weddingDate","budget","categoryBudgets","guests","expenses","events","tasks","vendors","venues","galleryItems"].forEach(function(k){payload[k]=vm[k];});
       localStorage.setItem("wedwiseData",JSON.stringify(payload));
       vm.daysToGo=calculateDays();
     };
@@ -91,6 +99,40 @@
     vm.toggleVenue=function(v){v.saved=!v.saved;vm.save();};vm.selectVenue=function(v){vm.selectedVenue=v;};
     vm.addVenueExpense=function(v){vm.expenses.push({id:nextId(vm.expenses),title:v.name+" booking",category:"Venue",estimated:Number(v.price||0),actual:0});vm.save();vm.selectedVenue=null;};
     vm.vendorIcon=function(type){return ({Photographer:"◉",Caterer:"♨",Decorator:"✿","Makeup artist":"✧",Florist:"❀","DJ / Music":"♫"})[type]||"✦";};
+
+    // Inspiration gallery: users can save their own reference image URLs.
+    vm.galleryCategories=["All","Ceremony","Decor","Reception","Venues","Details","Bridal"];
+    vm.galleryFilter="All";
+    vm.galleryForm={category:"Details"};
+    vm.galleryMatches=function(photo){return vm.galleryFilter==="All" || photo.category===vm.galleryFilter;};
+    vm.galleryFavorites=function(){return vm.galleryItems.filter(function(photo){return photo.favorite;}).length;};
+    vm.addGalleryItem=function(){
+      var f=vm.galleryForm;
+      if(!f.title || !f.image || !/^https?:\/\//i.test(f.image)) return;
+      vm.galleryItems.unshift({id:nextId(vm.galleryItems),title:f.title,category:f.category||"Details",image:f.image,favorite:false});
+      vm.galleryForm={category:"Details"}; vm.save();
+    };
+    vm.toggleGalleryFavorite=function(photo){photo.favorite=!photo.favorite;vm.save();};
+    vm.removeGalleryItem=function(id){vm.galleryItems=vm.galleryItems.filter(function(photo){return photo.id!==id;});vm.save();};
+
+    // Three coordinated classic palettes, remembered on this browser.
+    vm.themes=["classic","sage","rose"];
+    vm.theme=localStorage.getItem("wedwiseTheme")||"classic";
+    if(vm.themes.indexOf(vm.theme)<0) vm.theme="classic";
+    function applyTheme(){document.documentElement.setAttribute("data-theme",vm.theme);}
+    vm.cycleTheme=function(){var i=vm.themes.indexOf(vm.theme);vm.theme=vm.themes[(i+1)%vm.themes.length];localStorage.setItem("wedwiseTheme",vm.theme);applyTheme();};
+    vm.themeLabel=function(){return vm.theme==="sage"?"Sage palette":vm.theme==="rose"?"Rose palette":"Classic palette";};
+    applyTheme();
+
+    // Download a portable backup of the planner's LocalStorage data.
+    vm.exportBackup=function(){
+      var payload={};
+      ["weddingDate","budget","categoryBudgets","guests","expenses","events","tasks","vendors","venues","galleryItems"].forEach(function(k){payload[k]=vm[k];});
+      var blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+      var url=URL.createObjectURL(blob);var link=document.createElement("a");
+      link.href=url;link.download="wedwise-planner-backup.json";document.body.appendChild(link);link.click();
+      document.body.removeChild(link);URL.revokeObjectURL(url);
+    };
     vm.save();
     $scope.$watch(function(){return vm.weddingDate;},function(n,o){if(n!==o)vm.save();});
     setInterval(function(){var n=Math.max(0,calculateDays());if(n!==vm.daysToGo){$scope.$applyAsync(function(){vm.daysToGo=n;});}},60000);
